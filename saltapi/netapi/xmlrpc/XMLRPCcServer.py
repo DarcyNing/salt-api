@@ -23,8 +23,6 @@ class Salter(object):
         else:
             perms = opts['external_auth'][token['eauth']]['*']
 
-        print 'salt token',token
-
         return {
             'token': token['token'],
             'expire': token['expire'],
@@ -44,10 +42,6 @@ class Salter(object):
             res = api.run(lowstate)
             return res
         return 'authentication required'
-
-class SessionXMLRPCServer(SimpleXMLRPCServer):
-    pass
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
