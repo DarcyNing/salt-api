@@ -24,7 +24,9 @@ def saltAuther(func):
         if not auth_token:
             return handler.write('auth token expire')
             
-        handler.lowstate = { k:v[0]  for k,v in handler.request.arguments.items() }
+        handler.lowstate = { k:v[0]  for k,v in handler.request.arguments.items() if not k == 'arg' }
+        handler.lowstate['arg'] = handler.get_arguments('arg')
+        print handler.lowstate
         handler.lowstate['token'] = auth_token['token']
         handler.token = auth_token
         func(handler,*args,**kwargs)
@@ -66,6 +68,7 @@ class Login(tornado.web.RequestHandler):
     def post(self):
         auth = salt.auth.LoadAuth(opts)
         lowstate = { k:v[0]  for k,v in self.request.arguments.items() }
+        print lowstate
         token = auth.mk_token(lowstate)
         if not 'token' in token:
             self.set_status(401)
